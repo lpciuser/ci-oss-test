@@ -1,0 +1,59 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+#set($symbol_us = '_' )
+#macro( ccase $str )
+#foreach( $word in $str.split('-') )$word.substring(0,1).toUpperCase()$word.substring(1)#end
+#end
+#macro( ucase $str )
+#foreach( $word in $str.split('-') )$word.toUpperCase()#end
+#end
+#macro( lcase $str )
+#foreach( $word in $str.split('-') )$word.toLowerCase()#end
+#end
+#set( $entityClassName = "#ccase( $entityName )" )
+#set( $entityNameUpperCase = "#ucase( $entityName )" )
+#set( $entityNameLowerCase = "#lcase( $entityName )" )
+#set( $serviceClassName = "#ccase( $serviceName )" )
+#set( $serviceNameUpperCase = "#ucase( $serviceName )" )
+#set( $serviceNameLowerCase = "#lcase( $serviceName )" )
+#set( $_serviceNameLowerCase = "_$serviceNameLowerCase" )
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.liveperson.maven</groupId>
+        <artifactId>liveperson-parent</artifactId>
+        <version>4.0.11</version>
+    </parent>
+    <groupId>${groupId}</groupId>
+    <version>${version}</version>
+    <artifactId>lp-${rootArtifactId}-reactor</artifactId>
+    <packaging>pom</packaging>
+    <name>lp-${rootArtifactId}-reactor</name>
+
+    <scm>
+        <connection>scm:git:https://ci_user@lpgithub.dev.lprnd.net/${gitOrg}/${serviceName}.git</connection>
+        <developerConnection>scm:git:https://ci_user@lpgithub.dev.lprnd.net/${gitOrg}/${serviceName}.git</developerConnection>
+        <url>https://ci_user@lpgithub.dev.lprnd.net/${gitOrg}/${serviceName}.git</url>
+    </scm>
+    
+    <properties>
+        <project.namespace>${rootArtifactId}</project.namespace>
+        <rpm.name>${rootArtifactId}</rpm.name>
+        <puppet.name>${rootArtifactId}</puppet.name>
+    </properties>
+
+
+    <dependencyManagement>
+        <dependencies>
+			<dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.8.1</version>
+                <type>jar</type>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+</project>

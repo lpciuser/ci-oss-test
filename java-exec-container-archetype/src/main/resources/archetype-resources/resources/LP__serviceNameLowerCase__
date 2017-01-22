@@ -1,0 +1,127 @@
+Skip to content
+ 1.3s  63,194 jobs  28% root  25% block   elasticsearch   redis   cache  Version 2.6.1
+This repository
+Search
+Pull requests
+Issues
+Gist
+ @gidis
+ Unwatch 4
+  Star 0
+ Fork 0 lp-maven-tools/lp-java-executble-archetype
+ Code  Issues 0  Pull requests 0  Wiki  Pulse  Graphs  Settings
+Branch: master Find file Copy pathlp-java-executble-archetype/src/main/resources/archetype-resources/lp-__rootArtifactId__-deployment/puppet/modules/__serviceNameLowerCase__/files/LP__serviceNameLowerCase__
+4ac2a56  on Dec 21, 2015
+@gidis gidis fix puppet and add jar with dependencies
+1 contributor
+RawBlameHistory     110 lines (99 sloc)  2.7 KB
+# INIT INFO
+# Provides:
+# Required-Start:    $remote_fs $syslog
+# Required-Stop:     $remote_fs $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Start daemon at boot time
+# chkconfig: 23 99 99
+# description: LP${serviceNameLowerCase} by Gidi Samuels.
+#
+### END INIT INFO
+
+dir="/liveperson/code/server_${serviceNameLowerCase}/lib/"
+user="appuser"
+
+logback_args="-Dlogback.configurationFile=/liveperson/code/server_${serviceNameLowerCase}/conf/logback.xml"
+jmx_args="-Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.port=10099"
+debug_args="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005"
+cmd="/liveperson/jdk8/bin/java -jar ${serviceNameLowerCase}-jar-with-dependencies.jar"
+debug_cmd="/liveperson/jdk8/bin/java -jar ${serviceNameLowerCase}-jar-with-dependencies.jar"
+
+name=`basename $0`
+pid_file="/var/run/$name.pid"
+stdout_log="/tmp/$name.log"
+stderr_log="/tmp/$name.err"
+
+get_pid() {
+    cat "$pid_file"
+}
+
+is_running() {
+    [ -f "$pid_file" ] && ps `get_pid` > /dev/null 2>&1
+}
+
+case "$1" in
+    start)
+    if is_running; then
+        echo "Already started"
+    else
+        case "$2" in
+          debug)
+            echo "Starting $name in debug"
+            su -s /bin/sh $user -c "cd $dir ; $debug_cmd >> $stdout_log 2>> $stderr_log" &
+          ;;
+          *)
+            echo "Starting $name"
+            su -s /bin/sh $user -c "cd $dir ; $cmd >> $stdout_log 2>> $stderr_log" &
+          ;;
+          esac
+        echo $! > "$pid_file"
+        if ! is_running; then
+            echo "Unable to start, see $stdout_log and $stderr_log"
+            exit 1
+        fi
+    fi
+    ;;
+    stop)
+    if is_running; then
+        echo -n "Stopping $name.."
+
+        PIDS=$(ps -ef| grep ${serviceNameLowerCase} | grep $user | grep -v grep |awk '{print $2}')
+        kill -9 $PIDS
+
+        for i in {1..10}
+        do
+            if ! is_running; then
+                break
+            fi
+
+            echo -n "."
+            sleep 1
+        done
+        echo
+
+        if is_running; then
+            echo "Not stopped; may still be shutting down or shutdown may have failed"
+            exit 1
+        else
+            echo "Stopped"
+            if [ -f "$pid_file" ]; then
+                rm "$pid_file"
+            fi
+        fi
+    else
+        echo "Not running"
+    fi
+    ;;
+    restart)
+    $0 stop
+    if is_running; then
+        echo "Unable to stop, will not attempt to start"
+        exit 1
+    fi
+    $0 start
+    ;;
+    status)
+    if is_running; then
+        echo "Running"
+    else
+        echo "Stopped"
+        exit 1
+    fi
+    ;;
+    *)
+    echo "Usage: $0 {start|stop|restart|status}"
+    exit 1
+    ;;
+esac
+
+exit 0

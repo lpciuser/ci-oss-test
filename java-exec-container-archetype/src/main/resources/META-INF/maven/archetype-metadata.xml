@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<archetype-descriptor xsi:schemaLocation="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.0.0 http://maven.apache.org/xsd/archetype-descriptor-1.0.0.xsd" name="ac-template-reactor"
+    xmlns="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <requiredProperties>
+    <requiredProperty key="serviceName" />
+    <requiredProperty key="entityName" />
+    <requiredProperty key="gitOrg" />
+  </requiredProperties>
+  <modules>
+    <module id="lp-${rootArtifactId}-app" dir="lp-__rootArtifactId__-app" name="lp-${rootArtifactId}-app">
+      <fileSets>
+        <fileSet filtered="true" encoding="UTF-8">
+          <directory>src/main/java</directory>
+          <includes>
+            <include>**/*.java</include>
+          </includes>
+        </fileSet>
+	  </fileSets>
+    </module>
+    <module id="lp-${rootArtifactId}-deployment" dir="lp-__rootArtifactId__-deployment" name="lp-${rootArtifactId}-deployment">
+      <fileSets>
+        <fileSet filtered="true" encoding="UTF-8">
+          <directory>kubernetes</directory>
+          <includes>
+            <include>**/*.*</include>
+          </includes>
+        </fileSet>
+      </fileSets>
+    </module>
+    <module id="lp-${rootArtifactId}-postbuild" dir="lp-__rootArtifactId__-postbuild" name="lp-${rootArtifactId}-postbuild">
+      <fileSets>
+      </fileSets>
+    </module>
+  </modules>
+</archetype-descriptor>
