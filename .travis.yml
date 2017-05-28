@@ -9,5 +9,7 @@ env:
     - # ^^ GPG_PASSPHRASE
 
 after_success:
+  - chmod +x ./before-deploy.sh
+  - chmod +x ./deploy.sh
   - ./before-deploy.sh
   - ./deploy.sh
