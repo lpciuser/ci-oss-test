@@ -9,7 +9,6 @@
   <url>http://maven.apache.org</url>
 
 <description>Liveperson ci oss lib</description>
-<url>https://github.com/LivePersonInc/ci-oss-test.git</url>
 <licenses>
     <license>
         <name>MIT License</name>
