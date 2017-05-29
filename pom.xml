@@ -18,9 +18,9 @@
 </licenses>
     
 <scm>
-    <url>https://github.com/LivePersonInc/ci-oss-test.git</url>
-    <connection>scm:git:git@github.com:LivePersonInc/ci-oss-test.git</connection>
-    <developerConnection>scm:git:git@github.com:LivePersonInc/ci-oss-test.git</developerConnection>
+    <url>https://github.com/liveperson/ci-oss-test.git</url>
+    <connection>scm:git:git@github.com:liveperson/ci-oss-test.git</connection>
+    <developerConnection>scm:git:git@github.com:liveperson/ci-oss-test.git</developerConnection>
 </scm>
     
 <developers>
